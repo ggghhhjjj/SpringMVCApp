@@ -12,6 +12,8 @@
     </head> 
     <body> 
         <h1>Hello - Spring Application</h1> 
-        <p>Greetings.</p> 
+        <p>Client ip addres is ${client.ip}</p>
+        <p>Client browser is ${client.agent}</p>
+        <p>Client server time request at ${client.time}</p>
     </body> 
 </html>

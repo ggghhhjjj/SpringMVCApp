@@ -4,5 +4,5 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 	<!-- the application context definition for the springapp DispatcherServlet -->
-	<bean name="/hello.htm" class="com.mycompany.springmvcapp.web.HelloController" />
+	<bean name="/connection" class="com.mycompany.springmvcapp.web.HelloController" />
 </beans>
