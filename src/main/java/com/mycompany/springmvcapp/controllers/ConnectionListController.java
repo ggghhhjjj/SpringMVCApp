@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 2015, George Shumakov <george.shumakov@gmail.com>
  * All rights reserved.
  *
@@ -23,47 +23,24 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package com.mycompany.springmvcapp.web;
+package com.mycompany.springmvcapp.controllers;
 
-import com.mycompany.springmvcapp.model.ClientRecord;
-import org.springframework.web.servlet.mvc.Controller;
-import org.springframework.web.servlet.ModelAndView;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.util.Locale;
-import org.springframework.web.util.HtmlUtils;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.Controller;
 
 /**
  *
- * @author George Shumakov
+ * @author George Shumakov <george.shumakov@gmail.com>
  */
-public class HelloController implements Controller {
-    
-    private static final String UNKNOWN = "unknown";
+public class ConnectionListController implements Controller{
 
-    protected final Log logger = LogFactory.getLog(getClass());
+    private static final String VIEW = "connection-list.jsp";
 
     @Override
-    public ModelAndView handleRequest(HttpServletRequest request,
-            HttpServletResponse response) throws ServletException, IOException {
-        logger.info("Returning hello view");
-        
-        String ipAddress = request.getHeader("X-FORWARDED-FOR");
-        if (ipAddress == null) {
-            ipAddress = request.getRemoteAddr();
-        }
-        ipAddress = null == ipAddress ? UNKNOWN : HtmlUtils.htmlEscape(ipAddress);
-        String userAgent = request.getHeader("User-Agent");
-        userAgent = null == userAgent ? UNKNOWN : HtmlUtils.htmlEscape(userAgent);
-        ClientRecord cr = new ClientRecord(ipAddress, userAgent);
-        
-        ModelAndView helloView = new ModelAndView("hello.jsp");
-        helloView.addObject("client", cr);
-        return helloView;
+    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        return new ModelAndView(VIEW);
     }
+    
 }

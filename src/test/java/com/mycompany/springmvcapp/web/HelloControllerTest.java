@@ -9,6 +9,7 @@ package com.mycompany.springmvcapp.web;
  *
  * @author George Shumakov
  */
+import com.mycompany.springmvcapp.controllers.ConnectionController;
 import org.springframework.web.servlet.ModelAndView; 
 import static org.junit.Assert.*; 
 import org.junit.Test; 
@@ -17,7 +18,7 @@ public class HelloControllerTest {
 
     @Test 
     public void testHandleRequestView() throws Exception { 
-        HelloController controller = new HelloController(); 
+        ConnectionController controller = new ConnectionController(); 
         ModelAndView modelAndView = controller.handleRequest(null, null); 
         assertEquals("hello.jsp", modelAndView.getViewName()); 
     } 
