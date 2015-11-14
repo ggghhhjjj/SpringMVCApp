@@ -13,11 +13,21 @@
         <title>Hello :: Spring Application</title> 
     </head> 
     <body> 
-        <h1>Clients report</h1>
-        <c:forEach items="${all}" var="client">
+        <h1>Clients report <fmt:formatDate type="date" value="${from}" /> - <fmt:formatDate type="date" value="${to}" /></h1>
+        <div>
+            <form action="connections-list">
+                <input type="date" name="from" autocomplete="on">
+                <input type="date" name="to" autocomplete="on">
+                <input type="submit">
+            </form>
+
+        </div>
+
+        <c:forEach items="${clients}" var="client">
             <div>ip: ${client.ip}, browser: ${client.agent}, date: <fmt:formatDate type="both" 
-                        dateStyle="long" timeStyle="long" 
-                        value="${client.time}" /></div>
-	</c:forEach>
+                                                                          dateStyle="long" timeStyle="long" 
+                                                                          value="${client.time}" /></div>
+            </c:forEach>
+
     </body> 
 </html>

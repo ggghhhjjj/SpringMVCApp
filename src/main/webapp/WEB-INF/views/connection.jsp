@@ -12,13 +12,14 @@
         <title>Hello :: Spring Application</title> 
     </head> 
     <body> 
-        <h1>Hello - Spring Application</h1> 
+        <h1>Client connection</h1>
+        <div class="allert">A limitation of the Apache Tomcat 7 will skip recording of requests without Host header. For details see  HTTP/1.1 specification </div>
         <p>Client ip addres is ${client.ip}</p>
         <p>Client browser is ${client.agent}</p>
         <p>Client server time request at  <fmt:formatDate type="both" 
                         dateStyle="long" timeStyle="long" 
                         value="${client.time}" /></p>
         <hr>
-        <a href="connection-list">Show all requests</a>
+        <a href="connections-list">Show all requests</a>
     </body> 
 </html>
