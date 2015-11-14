@@ -9,6 +9,8 @@
     http://www.springframework.org/schema/context/spring-context.xsd"
 >
     <context:component-scan base-package="com.mycompany.springmvcapp" />
+     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+          p:prefix="/WEB-INF/views/" />
     <!-- the application context definition for the springapp DispatcherServlet -->
     <bean name="/connection" class="com.mycompany.springmvcapp.controllers.ConnectionController" />
     <bean name="/connection-list" class="com.mycompany.springmvcapp.controllers.ConnectionListController" />
