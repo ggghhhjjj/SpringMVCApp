@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 2015, George Shumakov <george.shumakov@gmail.com>
  * All rights reserved.
  *
@@ -23,55 +23,18 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package com.mycompany.springmvcapp.domain;
+package com.mycompany.springmvcapp.service;
 
-import java.text.DateFormat;
+import com.mycompany.springmvcapp.domain.Client;
 import java.util.Date;
-import java.util.Locale;
+import java.util.List;
 
 /**
  *
  * @author George Shumakov <george.shumakov@gmail.com>
  */
-public class ClientRecord {
-
-    private static final DateFormat DATE_FORMATER = DateFormat.getDateTimeInstance(
-            DateFormat.MEDIUM,
-            DateFormat.MEDIUM,
-            Locale.getDefault());
-
-    private String ipAddress;
-    private String userAgent;
-    private String time;
-
-    public ClientRecord(String ipAddress, String userAgent) {
-        this.ipAddress = ipAddress;
-        this.userAgent = userAgent;
-        this.time = DATE_FORMATER.format(new Date());
-    }
-
-    public String getIp() {
-        return ipAddress;
-    }
-
-    public void setIp(String ip) {
-        this.ipAddress = ip;
-    }
-
-    public String getAgent() {
-        return userAgent;
-    }
-
-    public void setAgent(String agent) {
-        this.userAgent = agent;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
+public interface ClientService {
+    List<Client> getAll();
+    List<Client> getAll(final Date from, final Date to);
+    void addClient (final Client client);
 }

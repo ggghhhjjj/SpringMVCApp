@@ -25,7 +25,7 @@
  */
 package com.mycompany.springmvcapp.controllers;
 
-import com.mycompany.springmvcapp.domain.ClientRecord;
+import com.mycompany.springmvcapp.domain.Client;
 import org.springframework.web.servlet.mvc.Controller;
 import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.ServletException;
@@ -60,12 +60,12 @@ public class ConnectionController implements Controller {
         ipAddress = null == ipAddress ? UNKNOWN : HtmlUtils.htmlEscape(ipAddress);
         String userAgent = request.getHeader("User-Agent");
         userAgent = null == userAgent ? UNKNOWN : HtmlUtils.htmlEscape(userAgent);
-        ClientRecord cr = new ClientRecord(ipAddress, userAgent);
-        logger.info("Request from " + cr.getIp() + " at " + cr.getTime());
+        Client client = new Client(ipAddress, userAgent);
+        logger.info("Request from " + client.getIp() + " at " + client.getTime());
 
-        ModelAndView helloView = new ModelAndView(VIEW);
-        helloView.addObject("client", cr);
+        ModelAndView connectionView = new ModelAndView(VIEW);
+        connectionView.addObject("client", client);
 
-        return helloView;
+        return connectionView;
     }
 }

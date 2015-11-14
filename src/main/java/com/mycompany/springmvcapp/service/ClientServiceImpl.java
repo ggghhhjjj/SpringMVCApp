@@ -23,32 +23,37 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package com.mycompany.springmvcapp.controllers;
+package com.mycompany.springmvcapp.service;
 
-import com.mycompany.springmvcapp.service.ClientService;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
+import com.mycompany.springmvcapp.domain.Client;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author George Shumakov <george.shumakov@gmail.com>
  */
-public class ConnectionListController implements Controller{
-
-    private static final String VIEW = "connection-list.jsp";
+@Service
+public class ClientServiceImpl implements ClientService {
     
-    @Autowired
-    private ClientService clientService; 
+    private static final List<Client> RESULT_SET_ALL = Arrays.asList(new Client ("2",""), new Client ("3", "Firefox"));
+    private static final List<Client> RESULT_SET_PERIOD = Arrays.asList(new Client ("2",""));
 
     @Override
-    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        
-        ModelAndView connectionListView = new ModelAndView(VIEW);
-        connectionListView.addObject("all", clientService.getAll());
-        return connectionListView;
+    public List<Client> getAll() {
+        return RESULT_SET_ALL;
+    }
+
+    @Override
+    public List<Client> getAll(Date from, Date to) {
+        return RESULT_SET_PERIOD;
+    }
+
+    @Override
+    public void addClient(Client client) {
+        RESULT_SET_ALL.add(client);
     }
     
 }

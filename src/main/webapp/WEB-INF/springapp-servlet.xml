@@ -7,8 +7,7 @@
     http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
     http://www.springframework.org/schema/context 
     http://www.springframework.org/schema/context/spring-context.xsd"
-    >
-
+>
     <context:component-scan base-package="com.mycompany.springmvcapp" />
     <!-- the application context definition for the springapp DispatcherServlet -->
     <bean name="/connection" class="com.mycompany.springmvcapp.controllers.ConnectionController" />

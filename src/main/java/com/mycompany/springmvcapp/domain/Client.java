@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright (c) 2015, George Shumakov <george.shumakov@gmail.com>
  * All rights reserved.
  *
@@ -23,32 +23,48 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package com.mycompany.springmvcapp.controllers;
+package com.mycompany.springmvcapp.domain;
 
-import com.mycompany.springmvcapp.service.ClientService;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
+import java.util.Date;
 
 /**
  *
  * @author George Shumakov <george.shumakov@gmail.com>
  */
-public class ConnectionListController implements Controller{
+public class Client {
 
-    private static final String VIEW = "connection-list.jsp";
-    
-    @Autowired
-    private ClientService clientService; 
+    private String ipAddress;
+    private String userAgent;
+    private Date time;
 
-    @Override
-    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        
-        ModelAndView connectionListView = new ModelAndView(VIEW);
-        connectionListView.addObject("all", clientService.getAll());
-        return connectionListView;
+    public Client(String ipAddress, String userAgent) {
+        this.ipAddress = ipAddress;
+        this.userAgent = userAgent;
+        this.time = new Date();
     }
-    
+
+    public String getIp() {
+        return ipAddress;
+    }
+
+    public void setIp(String ip) {
+        this.ipAddress = ip;
+    }
+
+    public String getAgent() {
+        return userAgent;
+    }
+
+    public void setAgent(String agent) {
+        this.userAgent = agent;
+    }
+
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
+    }
+
 }
