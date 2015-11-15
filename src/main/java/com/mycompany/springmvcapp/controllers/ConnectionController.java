@@ -25,7 +25,7 @@
  */
 package com.mycompany.springmvcapp.controllers;
 
-import com.mycompany.springmvcapp.domain.Client;
+import com.mycompany.springmvcapp.entities.Client;
 import com.mycompany.springmvcapp.service.ClientService;
 import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +35,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.context.annotation.Scope;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.util.HtmlUtils;
 import org.springframework.ui.Model;
@@ -69,7 +68,7 @@ public class ConnectionController {
     protected final Log logger = LogFactory.getLog(getClass());
 
     @RequestMapping(value = "/connection")
-    public String connection(Model model, @RequestHeader(name = USER_AGENT, required = false) String agent, HttpServletRequest request) {
+    public String connection(Model model, @RequestHeader(value = USER_AGENT, required = false) String agent, HttpServletRequest request) {
 
         String ipAddress = null;
         if (null != request) {
@@ -82,21 +81,21 @@ public class ConnectionController {
         String userAgent = null == agent ? UNKNOWN : HtmlUtils.htmlEscape(agent);
         ipAddress = null == ipAddress ? UNKNOWN : HtmlUtils.htmlEscape(ipAddress);
         Client client = new Client(ipAddress, userAgent);
-        logger.info("Request from " + client.getIp() + " at " + client.getTime());
-
+        logger.info("Request from " + client.getIp() + " at " + client.getDateTime());
+        clientService.addClient(client);
         model.addAttribute(CLIENT_ATTR, client);
         return CONNECTION_VIEW;
     }
 
     @RequestMapping(value = "/connections-list", method = RequestMethod.GET)
     public String connectionsList(Model model,
-            @RequestParam(name = "from", required = false)
-            @DateTimeFormat(pattern = "yyyy-MM-dd") Date from,
-            @RequestParam(name = "to", required = false)
+            @RequestParam(value = FROM_ATTR, required = false)
+            @DateTimeFormat(pattern = "yyyy-MM-dd") Date from, //FIXME: 2015-14-
+            @RequestParam(value = TO_ATTR, required = false)
             @DateTimeFormat(pattern = "yyyy-MM-dd") Date to
     ) {
 
-        model.addAttribute(CLIENTS_ATTR, clientService.getAll());
+        model.addAttribute(CLIENTS_ATTR, clientService.getAll(from, to));
         model.addAttribute(FROM_ATTR, from);
         model.addAttribute(TO_ATTR, to);
         return CONNECTIONS_LIST_VIEW;

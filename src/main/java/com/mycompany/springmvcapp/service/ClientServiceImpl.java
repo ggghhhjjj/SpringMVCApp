@@ -25,11 +25,15 @@
  */
 package com.mycompany.springmvcapp.service;
 
-import com.mycompany.springmvcapp.domain.Client;
-import java.util.Arrays;
+import com.mycompany.springmvcapp.entities.Client;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TemporalType;
+import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -37,23 +41,33 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ClientServiceImpl implements ClientService {
-    
-    private static final List<Client> RESULT_SET_ALL = Arrays.asList(new Client ("2",""), new Client ("3", "Firefox"));
-    private static final List<Client> RESULT_SET_PERIOD = Arrays.asList(new Client ("2",""));
 
-    @Override
-    public List<Client> getAll() {
-        return RESULT_SET_ALL;
-    }
+    // Injected database connection:
+    @PersistenceContext
+    private EntityManager em;
 
     @Override
     public List<Client> getAll(Date from, Date to) {
-        return RESULT_SET_PERIOD;
+        TypedQuery<Client> query;
+        if (null == from && null == to) {
+            query = em.createNamedQuery("Client.findAll", Client.class);
+        } else if (null != from && null != to) {
+            query = em.createNamedQuery("Client.findBetweenFromAndTo", Client.class);
+            query.setParameter("from", from, TemporalType.DATE).setParameter("to", to, TemporalType.DATE);
+        } else if (null == to) {
+            query = em.createNamedQuery("Client.findAfterFrom", Client.class);
+            query.setParameter("from", from, TemporalType.DATE);
+        } else {
+            query = em.createNamedQuery("Client.findBeforeTo", Client.class);
+            query.setParameter("to", to, TemporalType.DATE);
+        }
+        return query.getResultList();
     }
 
     @Override
+    @Transactional
     public void addClient(Client client) {
-        RESULT_SET_ALL.add(client);
+        em.persist(client);
     }
-    
+
 }

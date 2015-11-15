@@ -25,7 +25,7 @@
  */
 package com.mycompany.springmvcapp.service;
 
-import com.mycompany.springmvcapp.domain.Client;
+import com.mycompany.springmvcapp.entities.Client;
 import java.util.Date;
 import java.util.List;
 
@@ -34,7 +34,6 @@ import java.util.List;
  * @author George Shumakov <george.shumakov@gmail.com>
  */
 public interface ClientService {
-    List<Client> getAll();
     List<Client> getAll(final Date from, final Date to);
     void addClient (final Client client);
 }

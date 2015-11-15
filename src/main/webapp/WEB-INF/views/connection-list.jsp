@@ -10,24 +10,28 @@
 <!DOCTYPE html>
 <html> 
     <head> 
-        <title>Hello :: Spring Application</title> 
+        <title>Hello :: Paddypower</title> 
     </head> 
-    <body> 
-        <h1>Clients report <fmt:formatDate type="date" value="${from}" /> - <fmt:formatDate type="date" value="${to}" /></h1>
+    <body>
+        <a href="connection">Back to connection</a>
+        <h1>Clients HTTP requests report
+            <c:out value="${empty from ? '' : ' from '}" />
+            <fmt:formatDate type="date" value="${from}" /> 
+            <c:out value="${empty to ? '' : ' to '}" />
+            <fmt:formatDate type="date" value="${to}" /></h1>
         <div>
             <form action="connections-list">
                 <input type="date" name="from" autocomplete="on">
                 <input type="date" name="to" autocomplete="on">
                 <input type="submit">
             </form>
-
         </div>
-
+        <hr>
         <c:forEach items="${clients}" var="client">
-            <div>ip: ${client.ip}, browser: ${client.agent}, date: <fmt:formatDate type="both" 
-                                                                          dateStyle="long" timeStyle="long" 
-                                                                          value="${client.time}" /></div>
+            <div>ip: ${client.ip}, browser: ${client.userAgent}, date: <fmt:formatDate type="both" 
+                                                                              dateStyle="long" timeStyle="long" 
+                                                                              value="${client.dateTime}" /></div>
             </c:forEach>
-
+        <hr>
     </body> 
 </html>
