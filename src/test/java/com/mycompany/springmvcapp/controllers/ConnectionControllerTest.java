@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author george
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:*/springapp-servlet.xml", "classpath:*/web.xml"})
+@ContextConfiguration(locations = {"classpath:*/springapp-servlet.xml", "classpath:*/web.xml"}) //TODO: create test profile
 @WebAppConfiguration
 public class ConnectionControllerTest {
 
