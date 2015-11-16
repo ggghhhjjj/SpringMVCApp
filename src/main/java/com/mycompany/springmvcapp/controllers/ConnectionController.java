@@ -35,7 +35,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.context.annotation.Scope;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.util.HtmlUtils;
 import org.springframework.ui.Model;
@@ -46,8 +45,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 /**
  * Application spring MVC controller.
  * 
- * '/connection' path is a gateway for HTTP requests which have to be registered
- * '/connections-list' for reporting of registered requests
+ * /connection path is a gateway for HTTP requests which have to be registered
+ * /connections-list for reporting of registered requests
  * 
  * State in controller will require synchronization to avoid threading issues.
  * @author George Shumakov
