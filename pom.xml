@@ -2,14 +2,23 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     
-    <artifactId>first-application</artifactId>
     <groupId>george.spring.mvc</groupId>
+    <artifactId>first-application</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Paddypower test WEB application</name>
+    <url>https://github.com/ggghhhjjj/SpringMVCApp</url>
+    <developers>
+        <developer>
+            <name>George Shumakov</name>
+            <email>george.shumakov@gmail.com</email>
+        </developer>
+    </developers>
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <version.tomcat>8.0.28</version.tomcat>
+        <application.war.name>application</application.war.name>
     </properties>
     
     <dependencies>
@@ -117,7 +126,89 @@
                     <target>1.7</target>
                 </configuration>
             </plugin>
+        
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <id>repackage-tomcat</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+
+                        <configuration>
+                            <target>
+                                <echo message="Re-packaging ${tomcat.archive.file}..." />
+
+                                <unzip src="${basedir}/src/main/lib/apache-tomcat-${version.tomcat}.zip" dest="${project.build.directory}" />
+
+                                <move file="${project.build.directory}/apache-tomcat-${version.tomcat}" tofile="${project.build.directory}/tomcat" />
+
+                                <!-- Remove the default webapps -->
+                                <delete dir="${project.build.directory}/tomcat/webapps/docs" />
+                                <delete dir="${project.build.directory}/tomcat/webapps/manager" />
+                                <delete dir="${project.build.directory}/tomcat/webapps/host-manager" />
+                                <delete dir="${project.build.directory}/tomcat/webapps/examples" />
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.10</version>
+                <executions>
+                    <execution>
+                        <id>deploy-application-on-tomcat</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>george.spring.mvc</groupId>
+                                    <artifactId>first-application</artifactId>
+                                    <version>1.0-SNAPSHOT</version>
+                                    <type>war</type>
+                                    <overWrite>false</overWrite>
+                                    <outputDirectory>${project.build.directory}/tomcat/webapps</outputDirectory>
+                                    <destFileName>${application.war.name}.war</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>${project.build.directory}/wars</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>tomcat-distribution</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <finalName>tomcat</finalName>
+                            <descriptors>
+                                <descriptor>src/assembly/tomcat.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
-        <finalName>application</finalName>
+        <finalName>${application.war.name}</finalName>
     </build>
 </project>
