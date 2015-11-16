@@ -39,7 +39,14 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- *
+ * Represents a client request.
+ * 
+ * The mandatory field is datetime represents a server time
+ * when  HTTP request is registered.
+ * 
+ * ip represents a client request ip if available.
+ * userAgent represents a client browser information if availabale
+ * 
  * @author George Shumakov <george.shumakov@gmail.com>
  */
 @Entity
@@ -61,7 +68,9 @@ public class Client implements java.io.Serializable {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(nullable=false, updatable=false)
     private String ip;
+    @Column(nullable=false, updatable=false)
     private String userAgent;
     @Temporal(TemporalType.TIMESTAMP)
     @Basic(optional=false)

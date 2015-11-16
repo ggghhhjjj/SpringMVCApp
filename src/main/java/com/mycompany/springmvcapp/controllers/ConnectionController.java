@@ -27,6 +27,7 @@ package com.mycompany.springmvcapp.controllers;
 
 import com.mycompany.springmvcapp.entities.Client;
 import com.mycompany.springmvcapp.service.ClientService;
+import com.mycompany.springmvcapp.service.FromToDateConverter;
 import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
@@ -43,7 +44,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- *
+ * Application spring MVC controller.
+ * 
+ * '/connection' path is a gateway for HTTP requests which have to be registered
+ * '/connections-list' for reporting of registered requests
+ * 
+ * State in controller will require synchronization to avoid threading issues.
  * @author George Shumakov
  */
 @Controller
@@ -54,8 +60,9 @@ public class ConnectionController {
     private static final String X_FORWARDED_FOR = "X-FORWARDED-FOR";
     private static final String USER_AGENT = "User-Agent";
 
+    private static final String INDEX_VIEW = "index";
     private static final String CONNECTION_VIEW = "connection";
-    private static final String CONNECTIONS_LIST_VIEW = "connection-list";
+    private static final String CONNECTIONS_LIST_VIEW = "connections-list";
 
     private static final String CLIENT_ATTR = "client";
     private static final String CLIENTS_ATTR = "clients";
@@ -64,6 +71,9 @@ public class ConnectionController {
 
     @Autowired
     private ClientService clientService;
+    
+    @Autowired
+    private FromToDateConverter dateConverter;
 
     protected final Log logger = LogFactory.getLog(getClass());
 
@@ -87,17 +97,38 @@ public class ConnectionController {
         return CONNECTION_VIEW;
     }
 
+    /**
+     * Renders a client requests report for a period.
+     * 
+     * The HTML5 date input specification 
+     * refers to the RFC3339 specification 
+     * {@link http://tools.ietf.org/html/rfc3339}, 
+     * which specifies a full-date format equal to: yyyy-mm-dd. 
+     * See section 5.6 of the RFC3339 specification for more details.
+     * 
+     * @param model
+     * @param from HTML 5 start date
+     * @param to HTML 5 end date
+     * @return report view name
+     */
     @RequestMapping(value = "/connections-list", method = RequestMethod.GET)
     public String connectionsList(Model model,
             @RequestParam(value = FROM_ATTR, required = false)
-            @DateTimeFormat(pattern = "yyyy-MM-dd") Date from, //FIXME: 2015-14-
+            String from, //HTML 5 input date format
             @RequestParam(value = TO_ATTR, required = false)
-            @DateTimeFormat(pattern = "yyyy-MM-dd") Date to
+            String to //HTML 5 input date format
     ) {
-
-        model.addAttribute(CLIENTS_ATTR, clientService.getAll(from, to));
-        model.addAttribute(FROM_ATTR, from);
-        model.addAttribute(TO_ATTR, to);
+        Date startDate = dateConverter.convertToStartDate(from);
+        Date endDate = dateConverter.convertToEndDate(to);
+        Date renderedEndDate = dateConverter.convertToStartDate(to);
+        model.addAttribute(CLIENTS_ATTR, clientService.getAll(startDate, endDate));
+        model.addAttribute(FROM_ATTR, startDate);
+        model.addAttribute(TO_ATTR, renderedEndDate);
         return CONNECTIONS_LIST_VIEW;
+    }
+    
+    @RequestMapping(value = "/index", method = RequestMethod.GET)
+    public String index () {
+        return INDEX_VIEW;
     }
 }

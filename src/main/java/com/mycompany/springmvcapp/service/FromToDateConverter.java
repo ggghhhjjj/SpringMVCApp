@@ -25,31 +25,34 @@
  */
 package com.mycompany.springmvcapp.service;
 
-import com.mycompany.springmvcapp.entities.Client;
 import java.util.Date;
-import java.util.List;
 
 /**
- * Provides clients data.
- *
+ * Period string to date convertor.
+ * 
  * @author George Shumakov <george.shumakov@gmail.com>
  */
-public interface ClientService {
-
+public interface FromToDateConverter {
+    
     /**
-     * Returns all persisted client requests for a period.
-     *
-     * @param from start date. If it is null the starting day is minus infinity
-     * @param to end date. If it is null the ending day is plus infinity.
-     * @return the list of client requests for the period
+     * Converts string to a starting date .
+     * 
+     * Starting date time must be 00:00:00
+     * 
+     * @param from - yyyy-MM-dd
+     * @return starting date or null if can not be converted
      */
-    public List<Client> getAll(final Date from, final Date to);
-
+    public Date convertToStartDate (String from);
+    
     /**
-     * Persists a client request.
-     *
-     * @param client a request to be persisted
-     * @throws IllegalArgumentException if trying to add null
+     * Converts string to an ending date.
+     * 
+     * Ending date time must be 
+     *   (date + 1 day normalizaed to 00:00:00 time)
+     * 
+     * @param to - yyyy-MM-dd
+     * @return ending date or null if can not be converted
      */
-    void addClient(final Client client);
+    public Date convertToEndDate (String to);
+    
 }

@@ -25,54 +25,62 @@
  */
 package com.mycompany.springmvcapp.service;
 
-import com.mycompany.springmvcapp.entities.Client;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TemporalType;
-import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Provides clients data for persistent context.
- * 
+ * Service for converting a JS date to starting and ending dates.
+ *
  * @author George Shumakov <george.shumakov@gmail.com>
  */
 @Service
-public class ClientServiceImpl implements ClientService {
+public class FromToDateConverterImpl implements FromToDateConverter {
 
-    // Injected database connection:
-    @PersistenceContext
-    private EntityManager em;
+    private static final DateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    private static final long TIMEADJ = 24*60*60*1000; //one day in ms
 
     @Override
-    public List<Client> getAll(Date from, Date to) {
-        TypedQuery<Client> query;
-        if (null == from && null == to) {
-            query = em.createNamedQuery("Client.findAll", Client.class);
-        } else if (null != from && null != to) {
-            query = em.createNamedQuery("Client.findBetweenFromAndTo", Client.class);
-            query.setParameter("from", from, TemporalType.DATE).setParameter("to", to, TemporalType.DATE);
-        } else if (null == to) {
-            query = em.createNamedQuery("Client.findAfterFrom", Client.class);
-            query.setParameter("from", from, TemporalType.DATE);
-        } else {
-            query = em.createNamedQuery("Client.findBeforeTo", Client.class);
-            query.setParameter("to", to, TemporalType.DATE);
+    public Date convertToStartDate(String from) {
+        if (null == from) {
+            return null;
         }
-        return query.getResultList();
+        return convert(from);
     }
-    
+
     @Override
-    @Transactional
-    public void addClient(Client client) {
-        if (null != client) {
-            em.persist(client);
-        } else {
-            throw new IllegalArgumentException ("Null can't be registered as a client request");
+    public Date convertToEndDate(String to) {
+        if (null == to) {
+            return null;
         }
+        //convert to a date with 00:00:00 time
+        Date date = convert(to);
+        if (null == date) {
+            return null;
+        }
+        //add a day and return
+        return new Date (date.getTime ()+TIMEADJ);
+    }
+
+    /**
+     * String to date converter.
+     * 
+     * Converted date will always be with 00:00:00 time
+     * @param date
+     * @return 
+     */
+    private static Date convert(String date) {
+        Date trimmed = null;
+        try {
+            synchronized (FORMAT) {
+                trimmed = FORMAT.parse(date);
+            }
+        } catch (ParseException e) {
+        } // if parsing failed null must be returned
+        return trimmed;
+
     }
 
 }

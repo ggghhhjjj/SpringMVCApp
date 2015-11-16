@@ -32,4 +32,7 @@
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
           p:prefix="/WEB-INF/views/" 
           p:suffix=".jsp"/>
+    
+    <mvc:resources mapping="/resources/**" location="/resources/initial/"  
+	cache-period="31556926"/>
 </beans>
